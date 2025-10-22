@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import '../models/food_model.dart';
 import 'package:get/get.dart';
-import './home_screen.dart';
-import '../theme/custom_colors.dart'; 
-import 'cart_screen.dart';
-import './favorite_screen.dart';
+import '../models/product_model.dart';
+import '../theme/custom_colors.dart';
+import '../controllers/cart_controllrt.dart';
+import '../controllers/favorite_controller.dart';
+import './cart_screen.dart';
+
 class FoodDetailScreen extends StatefulWidget {
   final FoodModel food;
   const FoodDetailScreen({super.key, required this.food});
@@ -22,18 +23,37 @@ class _FoodDetailScreenState extends State<FoodDetailScreen>
   late List<FoodModel> foodVariants;
   final int maxSliderCount = 3;
 
-  final Map<int, Map<String, String>> foodIngredients = {
-    1: {'Bun': '2 pcs', 'Patty': '1 pc', 'Cheese': '1 slice', 'Lettuce': '20 gm'},
-    2: {'Dough': '200 gm', 'Cheese': '100 gm', 'Tomato': '50 gm', 'Pepperoni': '50 gm'},
-    3: {'Chicken': '12 pcs', 'Flour': '50 gm', 'Spices': '10 gm'},
-    4: {'Rice': '100 gm', 'Salmon': '50 gm', 'Seaweed': '20 gm', 'Avocado': '30 gm'},
-  };
+  final FavoriteController favoriteController = Get.find();
+  final CartController cartController = Get.find();
 
   late TabController _tabController;
+
+  final Map<int, Map<String, String>> foodIngredients = {
+    1: {
+      'Bun': '2 pcs',
+      'Patty': '1 pc',
+      'Cheese': '1 slice',
+      'Lettuce': '20 gm',
+    },
+    2: {
+      'Dough': '200 gm',
+      'Cheese': '100 gm',
+      'Tomato': '50 gm',
+      'Pepperoni': '50 gm',
+    },
+    3: {'Chicken': '12 pcs', 'Flour': '50 gm', 'Spices': '10 gm'},
+    4: {
+      'Rice': '100 gm',
+      'Salmon': '50 gm',
+      'Seaweed': '20 gm',
+      'Avocado': '30 gm',
+    },
+  };
 
   @override
   void initState() {
     super.initState();
+
     _tabController = TabController(length: 3, vsync: this);
 
     foodVariants = foods
@@ -68,8 +88,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen>
 
   @override
   Widget build(BuildContext context) {
-    final currentIngredients = foodIngredients[widget.food.id] ?? {};
     final colors = Theme.of(context).extension<CustomColors>();
+    final currentIngredients = foodIngredients[widget.food.id] ?? {};
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -120,7 +140,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen>
                           itemBuilder: (context, index) {
                             return FoodImagePlaceholder(
                               item: foodVariants[index],
-                              backgroundColor: colors?.accentColor ?? Colors.amber[100]!,
+                              backgroundColor:
+                                  colors?.accentColor ?? Colors.amber[100]!,
                             );
                           },
                         ),
@@ -161,22 +182,32 @@ class _FoodDetailScreenState extends State<FoodDetailScreen>
                             color: colors?.darkTextColor ?? Colors.black,
                           ),
                         ),
-                        // InkWell(
-                        //   onTap: (){
-
-                        //   },
-                        //   Icon(Icons.favorite,
-                        //     color: colors?.accentColor ?? Colors.amber),
-                        // )
-                        
-                        Icon(Icons.favorite,
-                            color: colors?.accentColor ?? Colors.amber),
+                        Obx(() {
+                          final isFav = favoriteController.favoriteItems.any(
+                            (f) => f.id == widget.food.id,
+                          ); // ✅ synchronous bool
+                          return IconButton(
+                            icon: Icon(
+                              isFav ? Icons.favorite : Icons.favorite_border,
+                              color: Colors.amber,
+                            ),
+                            onPressed: () {
+                              favoriteController.toggleFavorite(
+                                widget.food,
+                              ); // handles async DB
+                            },
+                          );
+                        }),
                       ],
                     ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        const Icon(Icons.location_on, color: Colors.amber, size: 16),
+                        const Icon(
+                          Icons.location_on,
+                          color: Colors.amber,
+                          size: 16,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           widget.food.category,
@@ -212,16 +243,18 @@ class _FoodDetailScreenState extends State<FoodDetailScreen>
                             widget.food.description,
                             style: TextStyle(
                               fontSize: 14,
-                              color: Theme.of(context).textTheme.bodyMedium?.color,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.color,
                             ),
                           ),
-
                           // Ingredients Tab
                           ListView(
                             children: _buildIngredientList(
-                                currentIngredients, colors),
+                              currentIngredients,
+                              colors,
+                            ),
                           ),
-
                           // Reviews Tab
                           Center(
                             child: Text(
@@ -246,14 +279,13 @@ class _FoodDetailScreenState extends State<FoodDetailScreen>
             right: 0,
             child: SafeArea(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    BackButtonWidget(),
-                    CartButtonWidget(),
-                  ],
+                  children: const [BackButtonWidget(), CartButtonWidget()],
                 ),
               ),
             ),
@@ -267,7 +299,11 @@ class _FoodDetailScreenState extends State<FoodDetailScreen>
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           boxShadow: const [
-            BoxShadow(color: Colors.black12, blurRadius: 5, offset: Offset(0, -2))
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 5,
+              offset: Offset(0, -2),
+            ),
           ],
         ),
         child: Row(
@@ -277,22 +313,29 @@ class _FoodDetailScreenState extends State<FoodDetailScreen>
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.remove_circle,
-                      color: colors?.accentColor ?? Colors.amber),
+                  icon: Icon(
+                    Icons.remove_circle,
+                    color: colors?.accentColor ?? Colors.amber,
+                  ),
                   onPressed: () {
                     setState(() {
                       if (_quantity > 1) _quantity--;
                     });
                   },
                 ),
-                Text("$_quantity",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: colors?.darkTextColor ?? Colors.black)),
+                Text(
+                  "$_quantity",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: colors?.darkTextColor ?? Colors.black,
+                  ),
+                ),
                 IconButton(
-                  icon: Icon(Icons.add_circle,
-                      color: colors?.accentColor ?? Colors.amber),
+                  icon: Icon(
+                    Icons.add_circle,
+                    color: colors?.accentColor ?? Colors.amber,
+                  ),
                   onPressed: () {
                     setState(() {
                       _quantity++;
@@ -301,24 +344,33 @@ class _FoodDetailScreenState extends State<FoodDetailScreen>
                 ),
               ],
             ),
-
             // Add to Cart Button
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: colors?.accentColor ?? Colors.deepOrange,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30,
+                  vertical: 15,
+                ),
               ),
               onPressed: () {
-                Get.snackbar("Cart", "${widget.food.name} added ($_quantity)");
-                Get.to(() => CartSCreen());
+                cartController.addToCart(widget.food, _quantity);
+                Get.snackbar(
+                  "Cart",
+                  "${widget.food.name} added ($_quantity)",
+                  snackPosition: SnackPosition.BOTTOM,
+                );
               },
               child: Text(
                 "Add to Cart - \$${(widget.food.price * _quantity).toStringAsFixed(2)}",
                 style: const TextStyle(
-                    color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
@@ -328,7 +380,9 @@ class _FoodDetailScreenState extends State<FoodDetailScreen>
   }
 
   List<Widget> _buildIngredientList(
-      Map<String, String> ingredients, CustomColors? colors) {
+    Map<String, String> ingredients,
+    CustomColors? colors,
+  ) {
     return ingredients.entries.map((entry) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -345,16 +399,22 @@ class _FoodDetailScreenState extends State<FoodDetailScreen>
             const SizedBox(width: 12),
             SizedBox(
               width: 100,
-              child: Text(entry.key,
-                  style: TextStyle(
-                      color: colors?.darkTextColor ?? Colors.black,
-                      fontWeight: FontWeight.w500)),
+              child: Text(
+                entry.key,
+                style: TextStyle(
+                  color: colors?.darkTextColor ?? Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
             Text(':', style: TextStyle(color: Theme.of(context).dividerColor)),
             const SizedBox(width: 8),
-            Text(entry.value,
-                style:
-                    TextStyle(color: Theme.of(context).textTheme.bodySmall?.color)),
+            Text(
+              entry.value,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodySmall?.color,
+              ),
+            ),
           ],
         ),
       );
@@ -362,7 +422,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen>
   }
 }
 
-// ---------------- Components ----------------
+// ---------- Components ----------
 
 class ThumbnailItem extends StatelessWidget {
   final String image;
@@ -388,7 +448,9 @@ class ThumbnailItem extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 5),
         decoration: BoxDecoration(
           border: Border.all(
-            color: isActive ? activeColor ?? Colors.orange : borderColor ?? Colors.grey,
+            color: isActive
+                ? activeColor ?? Colors.orange
+                : borderColor ?? Colors.grey,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(8),
@@ -405,7 +467,6 @@ class ThumbnailItem extends StatelessWidget {
 class FoodImagePlaceholder extends StatelessWidget {
   final FoodModel item;
   final Color backgroundColor;
-
   const FoodImagePlaceholder({
     Key? key,
     required this.item,
@@ -446,12 +507,41 @@ class CartButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.shopping_cart),
-      color: Theme.of(context).iconTheme.color,
-      onPressed: () {
-        Get.to(()=>CartSCreen());
-      },
+    final CartController cartController = Get.find();
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.shopping_cart),
+          color: Theme.of(context).iconTheme.color,
+          onPressed: () => Get.to(() => CartScreen()),
+        ),
+        Positioned(
+          right: 0,
+          top: -2,
+          child: Obx(() {
+            if (cartController.items.isEmpty) return const SizedBox.shrink();
+            return Container(
+              padding: const EdgeInsets.all(4),
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+              constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+              child: Center(
+                child: Text(
+                  "${cartController.items.length}",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
+      ],
     );
   }
 }

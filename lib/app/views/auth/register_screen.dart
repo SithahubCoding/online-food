@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../../controllers/authController.dart';
+import '../../controllers/auth_controller.dart';
 import './login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -229,7 +229,7 @@ class SocialButton extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: Colors.white,
-          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.3), blurRadius: 4, offset: const Offset(0, 2))],
+          boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 4, offset: const Offset(0, 2))],
         ),
         child: FaIcon(icon, color: color, size: 28),
       ),

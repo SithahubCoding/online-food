@@ -1,0 +1,77 @@
+com.example.onlinefood.app-jetified-camera-lifecycle-1.5.0-0 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\033f299f78f2aece9016522c2d770b33\transformed\jetified-camera-lifecycle-1.5.0\res
+com.example.onlinefood.app-jetified-tracing-ktx-1.2.0-1 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\0ab7d8c42824fe5a003aca163de83eb0\transformed\jetified-tracing-ktx-1.2.0\res
+com.example.onlinefood.app-jetified-savedstate-ktx-1.2.1-2 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\0e6d42688cebfcf93b7dfb2301d1e85b\transformed\jetified-savedstate-ktx-1.2.1\res
+com.example.onlinefood.app-jetified-camera-core-1.5.0-3 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\0f003adeabb06d5023f8e88c6fe8ee64\transformed\jetified-camera-core-1.5.0\res
+com.example.onlinefood.app-jetified-profileinstaller-1.4.0-4 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\1289f1bb5f8e3b879c6c89494d0cdccf\transformed\jetified-profileinstaller-1.4.0\res
+com.example.onlinefood.app-jetified-savedstate-1.2.1-5 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\13f40eec596e8ce2c801c4be2eb950cb\transformed\jetified-savedstate-1.2.1\res
+com.example.onlinefood.app-jetified-activity-ktx-1.10.1-6 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\1ec4ef50de0761ccf5a354a6ce04e558\transformed\jetified-activity-ktx-1.10.1\res
+com.example.onlinefood.app-fragment-1.7.1-7 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\1f7c45a8e427e4987ac1396475eb6a1d\transformed\fragment-1.7.1\res
+com.example.onlinefood.app-transition-1.4.1-8 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\2279527902bc9d0464a9b0bc184519c4\transformed\transition-1.4.1\res
+com.example.onlinefood.app-jetified-datastore-preferences-release-9 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\2540b291effcfefc0b56909d3623a9b1\transformed\jetified-datastore-preferences-release\res
+com.example.onlinefood.app-lifecycle-livedata-2.7.0-10 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\2d710b77d107757aab7d375f93fed76b\transformed\lifecycle-livedata-2.7.0\res
+com.example.onlinefood.app-jetified-core-ktx-1.13.1-11 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\3d00d93013c5b3d6a29286ac43703b6f\transformed\jetified-core-ktx-1.13.1\res
+com.example.onlinefood.app-jetified-play-services-base-18.5.0-12 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\41bf18f9c729aeb102df648edbb7101c\transformed\jetified-play-services-base-18.5.0\res
+com.example.onlinefood.app-lifecycle-viewmodel-2.7.0-13 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\460ff6f5f2f14ba7313062f3b146ad9a\transformed\lifecycle-viewmodel-2.7.0\res
+com.example.onlinefood.app-jetified-lifecycle-process-2.7.0-14 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\504636b425b8b1fd059c74ba5a65a107\transformed\jetified-lifecycle-process-2.7.0\res
+com.example.onlinefood.app-jetified-datastore-core-release-15 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\55b309535d63303116146d50e1cbe082\transformed\jetified-datastore-core-release\res
+com.example.onlinefood.app-jetified-firebase-common-22.0.1-16 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\57a3bc56f43a337ec3a46fb211e4d3c0\transformed\jetified-firebase-common-22.0.1\res
+com.example.onlinefood.app-appcompat-1.6.1-17 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\605dd246f059858a3b8d9be5ed9be729\transformed\appcompat-1.6.1\res
+com.example.onlinefood.app-browser-1.4.0-18 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\606b918f39a00254621c3726c9ac6d8c\transformed\browser-1.4.0\res
+com.example.onlinefood.app-jetified-fragment-ktx-1.7.1-19 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\65fb118ad29601119f36d2ef6effea7e\transformed\jetified-fragment-ktx-1.7.1\res
+com.example.onlinefood.app-jetified-activity-1.10.1-20 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\67bfe11d426e1f03f95e3770e50a1110\transformed\jetified-activity-1.10.1\res
+com.example.onlinefood.app-jetified-credentials-1.2.0-rc01-21 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\6a9bd98b90139d2e50cf0aec796c9bfe\transformed\jetified-credentials-1.2.0-rc01\res
+com.example.onlinefood.app-jetified-window-java-1.2.0-22 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\735f025cd27cb5a1f16c56a967044f36\transformed\jetified-window-java-1.2.0\res
+com.example.onlinefood.app-core-runtime-2.2.0-23 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\75eb96fda8175141e4090296e08d8010\transformed\core-runtime-2.2.0\res
+com.example.onlinefood.app-jetified-datastore-release-24 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\76dbe67f8f184b5a45a47c7d5726d6e6\transformed\jetified-datastore-release\res
+com.example.onlinefood.app-lifecycle-livedata-core-2.7.0-25 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\77d2eb5a06e962b2d80298b522f5efbd\transformed\lifecycle-livedata-core-2.7.0\res
+com.example.onlinefood.app-jetified-core-viewtree-1.0.0-26 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\7a6bc77f65ac8919e20c9dff88ff2150\transformed\jetified-core-viewtree-1.0.0\res
+com.example.onlinefood.app-jetified-ucrop-2.2.11-27 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\91fe493213d5242c0026ba7f262e4018\transformed\jetified-ucrop-2.2.11\res
+com.example.onlinefood.app-lifecycle-runtime-2.7.0-28 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\9bd37af326a5d3792ee401084997029c\transformed\lifecycle-runtime-2.7.0\res
+com.example.onlinefood.app-jetified-credentials-play-services-auth-1.2.0-rc01-29 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\9ddae485efe36b2121e03cd470177dbf\transformed\jetified-credentials-play-services-auth-1.2.0-rc01\res
+com.example.onlinefood.app-slidingpanelayout-1.2.0-30 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\a1a3ae64028f074e017c46baa2d2076d\transformed\slidingpanelayout-1.2.0\res
+com.example.onlinefood.app-jetified-lifecycle-runtime-ktx-2.7.0-31 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\a48696f47656d5e2a6e9e900e4d2db84\transformed\jetified-lifecycle-runtime-ktx-2.7.0\res
+com.example.onlinefood.app-jetified-emoji2-1.2.0-32 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\ab36fb07d648fac8608087002ab1e585\transformed\jetified-emoji2-1.2.0\res
+com.example.onlinefood.app-preference-1.2.1-33 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\ad714d5efd93a376accd279d15adad10\transformed\preference-1.2.1\res
+com.example.onlinefood.app-jetified-play-services-auth-20.7.0-34 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\b2e6d40e2e948d62b76552580e73dcaa\transformed\jetified-play-services-auth-20.7.0\res
+com.example.onlinefood.app-core-1.13.1-35 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\b3c10aea4b341c1c62738dbd370d2da4\transformed\core-1.13.1\res
+com.example.onlinefood.app-jetified-tracing-1.2.0-36 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\b60d150c0f7a7f9017cab2ff48b203d4\transformed\jetified-tracing-1.2.0\res
+com.example.onlinefood.app-jetified-core-1.0.0-37 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\ba57bc17da587030b028d093110612d8\transformed\jetified-core-1.0.0\res
+com.example.onlinefood.app-jetified-appcompat-resources-1.6.1-38 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\c2d7f9eb780ac6144777dadc76dba5f3\transformed\jetified-appcompat-resources-1.6.1\res
+com.example.onlinefood.app-coordinatorlayout-1.0.0-39 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\c3f011ba5e5424ed1d011d1efcce057e\transformed\coordinatorlayout-1.0.0\res
+com.example.onlinefood.app-jetified-core-common-2.0.3-40 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\c48af60abab870bab6db3b034bb21e2a\transformed\jetified-core-common-2.0.3\res
+com.example.onlinefood.app-jetified-lifecycle-viewmodel-ktx-2.7.0-41 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\c69d0b0497bc1d2fdf41f3c2238f694f\transformed\jetified-lifecycle-viewmodel-ktx-2.7.0\res
+com.example.onlinefood.app-jetified-emoji2-views-helper-1.2.0-42 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\cd666d8e863571d2eb3735c6d0e0af6f\transformed\jetified-emoji2-views-helper-1.2.0\res
+com.example.onlinefood.app-jetified-play-services-maps-19.2.0-43 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\cf6572157f8f16f15ebd9cf3f9c943a1\transformed\jetified-play-services-maps-19.2.0\res
+com.example.onlinefood.app-jetified-android-maps-utils-3.6.0-44 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\d16847fbc5d3815c045e0bc3e981b6be\transformed\jetified-android-maps-utils-3.6.0\res
+com.example.onlinefood.app-jetified-startup-runtime-1.1.1-45 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\e163ef5a2b9bb49c526baaac1ecedea4\transformed\jetified-startup-runtime-1.1.1\res
+com.example.onlinefood.app-recyclerview-1.0.0-46 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\e16ff81d9c35a84ba31371380dd9377e\transformed\recyclerview-1.0.0\res
+com.example.onlinefood.app-jetified-play-services-basement-18.8.0-47 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\e52dfc3e1061fafa0363c47ace589646\transformed\jetified-play-services-basement-18.8.0\res
+com.example.onlinefood.app-jetified-lifecycle-livedata-core-ktx-2.7.0-48 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\e8abcb9996240786a446f81123d161c1\transformed\jetified-lifecycle-livedata-core-ktx-2.7.0\res
+com.example.onlinefood.app-jetified-datastore-preferences-core-release-49 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\e97ce12afed95459d9bd6af7c8e46822\transformed\jetified-datastore-preferences-core-release\res
+com.example.onlinefood.app-jetified-window-1.2.0-50 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\ea185b7f540868a01efad6c11552e316\transformed\jetified-window-1.2.0\res
+com.example.onlinefood.app-jetified-featurecombinationquery-1.5.0-51 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\ec1daee14e70fed3c4e0ce24f31e501b\transformed\jetified-featurecombinationquery-1.5.0\res
+com.example.onlinefood.app-jetified-camera-camera2-1.5.0-52 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\f9d07244d68b47f67032af7e103794ec\transformed\jetified-camera-camera2-1.5.0\res
+com.example.onlinefood.app-jetified-annotation-experimental-1.4.1-53 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\fbedcef5406c65417bb5d92f1dd8a453\transformed\jetified-annotation-experimental-1.4.1\res
+com.example.onlinefood.app-jetified-lifecycle-viewmodel-savedstate-2.7.0-54 C:\Users\Riel Sitha\.gradle\caches\8.12\transforms\fef461bd591dc594ae61038b1b3ad8ee\transformed\jetified-lifecycle-viewmodel-savedstate-2.7.0\res
+com.example.onlinefood.app-debug-55 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore-6.0.3\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-debug-56 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_auth-6.1.0\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-debug-57 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_core-4.2.0\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-debug-58 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_storage-13.0.3\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-debug-59 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_keyboard_visibility_temp_fork-0.1.5\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-debug-60 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.31\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-debug-61 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\geolocator_android-4.6.2\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-debug-62 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\google_maps_flutter_android-2.18.4\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-debug-63 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\image_cropper-11.0.0\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-debug-64 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.13+1\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-debug-65 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\location-6.0.2\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-debug-66 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\mobile_scanner-7.1.2\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-debug-67 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_android-2.2.20\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-debug-68 C:\Users\Riel Sitha\AppData\Local\Pub\Cache\hosted\pub.dev\sqflite_android-2.4.2+2\android\build\intermediates\packaged_res\debug\packageDebugResources
+com.example.onlinefood.app-pngs-69 D:\Mobile\onlinefood\android\app\build\generated\res\pngs\debug
+com.example.onlinefood.app-res-70 D:\Mobile\onlinefood\android\app\build\generated\res\processDebugGoogleServices
+com.example.onlinefood.app-resValues-71 D:\Mobile\onlinefood\android\app\build\generated\res\resValues\debug
+com.example.onlinefood.app-packageDebugResources-72 D:\Mobile\onlinefood\android\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.example.onlinefood.app-packageDebugResources-73 D:\Mobile\onlinefood\android\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.example.onlinefood.app-debug-74 D:\Mobile\onlinefood\android\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.example.onlinefood.app-debug-75 D:\Mobile\onlinefood\android\app\src\debug\res
+com.example.onlinefood.app-main-76 D:\Mobile\onlinefood\android\app\src\main\res

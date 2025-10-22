@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import './auth/login_screen.dart';
+import 'auth/login_screen.dart';
 
 class IntroScreenDemo extends StatefulWidget {
+  const IntroScreenDemo({super.key});
   @override
   State<IntroScreenDemo> createState() => _IntroScreenDemoState();
 }

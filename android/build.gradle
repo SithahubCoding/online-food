@@ -1,0 +1,47 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext.kotlin_version = '2.1.0' // Define Kotlin version globally
+    repositories {
+        // Repository សំខាន់ៗ (Important Repositories)
+        google()
+        mavenCentral()
+        
+        // **[ចាប់ផ្តើម] ផ្នែកដែលបានបន្ថែមដើម្បីដោះស្រាយបញ្ហា Network/DNS**
+        // បន្ថែម Repository ជំនួស (Mirror) សម្រាប់ការតភ្ជាប់ដែលរងការរឹតបន្តឹង
+        maven { url 'https://maven.aliyun.com/repository/google' } 
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        // **[បញ្ចប់] ផ្នែកដែលបានបន្ថែមដើម្បីដោះស្រាយបញ្ហា Network/DNS**
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.7.3' 
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.4.3' // Firebase Google Services
+    }
+}
+
+// ការកំណត់សម្រាប់ Sub-projects ទាំងអស់ (Configuration for all Sub-projects)
+allprojects {
+    repositories {
+        // Repository សំខាន់ៗ (Important Repositories)
+        google() 
+        mavenCentral() 
+
+        // **[ចាប់ផ្តើម] ផ្នែកដែលបានបន្ថែមដើម្បីដោះស្រាយបញ្ហា Network/DNS សម្រាប់ Sub-projects**
+        maven { url 'https://maven.aliyun.com/repository/google' } 
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        // **[បញ្ចប់] ផ្នែកដែលបានបន្ថែមដើម្បីដោះស្រាយបញ្ហា Network/DNS សម្រាប់ Sub-projects**
+    }
+}
+
+// ការកំណត់សម្រាប់ Root Project (Configuration for Root Project)
+rootProject.buildDir = file('../build')
+subprojects {
+    project.buildDir = file("${rootProject.buildDir}/${project.name}")
+}
+
+// Task សម្រាប់លុប build files (Task to delete build files)
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

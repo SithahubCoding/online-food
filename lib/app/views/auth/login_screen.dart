@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../home_screen.dart';
+// import '../home/home_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import './register_screen.dart';
-import './forget_password_screen.dart';
-import '../../controllers/authController.dart'; // ✅ make sure filename matches
+import 'register_screen.dart';
+import 'forget_password_screen.dart';
+import '../../controllers/auth_controller.dart'; 
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -22,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
+      body:Padding(
         padding: const EdgeInsets.all(24.0),
         child: Center(
           child: SingleChildScrollView(
@@ -185,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
           shape: BoxShape.circle,
           color: Colors.white,
           boxShadow: [
-            BoxShadow(color: Colors.grey.withOpacity(0.3), blurRadius: 4),
+            BoxShadow(color: Colors.grey, blurRadius: 4),
           ],
         ),
         child: FaIcon(icon, size: 20, color: color),

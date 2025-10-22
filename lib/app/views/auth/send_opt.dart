@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// Assuming this is where your final destination is after verification
 import './reset_password.dart'; 
 
 class VerifyOtpScreen extends StatelessWidget {
+  const VerifyOtpScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +15,7 @@ class VerifyOtpScreen extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(12.0),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -23,11 +23,11 @@ class VerifyOtpScreen extends StatelessWidget {
               children: [
                 // Burger Image/Icon (as seen in your design)
                 Image.asset(
-                  'assets/images/logo.png', // **Replace with your actual asset path**
+                  'assets/images/logo.png',
                   height: 120,
                   width: 120,
                   errorBuilder: (context, error, stackTrace) {
-                    // Fallback in case the image asset is not available
+                    
                     return const Icon(
                       Icons.fastfood,
                       size: 120,
@@ -52,11 +52,11 @@ class VerifyOtpScreen extends StatelessWidget {
                 // OTP Input (mimicking 4 separate boxes)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(4, (index) {
+                  children: List.generate(6, (index) {
                     return Container(
-                      width: 50,
-                      height: 50,
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      width: 48,
+                      height: 48,
+                      margin: const EdgeInsets.symmetric(horizontal: 6),
                       child: TextField(
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,

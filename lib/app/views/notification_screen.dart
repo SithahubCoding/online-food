@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'cart_screen.dart';
 class NotificationScreen  extends StatelessWidget{
+  const NotificationScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,10 +21,15 @@ class NotificationScreen  extends StatelessWidget{
           Padding(
             padding: const EdgeInsets.only(left: 12, right: 12),
             child: Row(
-              children: const [
-                Icon(Icons.notifications),
+              children: [
                 SizedBox(width: 12),
-                Icon(Icons.shopping_cart),
+                InkWell(
+                  splashColor: Colors.greenAccent,
+                  onTap: () {
+                    Get.to(() => CartScreen());
+                  },
+                  child: Icon(Icons.shopping_cart),
+                ),
               ],
             ),
           ),

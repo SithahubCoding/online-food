@@ -3,38 +3,68 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'app/views/spash_screen.dart';
 import 'app/theme/custom_colors.dart';
+import './app/bindings/initial_binding.dart';
+import 'app/controllers/language_controller.dart';
+import 'app/translations/en_US.dart';
+import 'app/translations/km_KH.dart';
+// import 'app/views/home/home_screen.dart';
+// import 'app/views/dashboard/product_list_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
   final Color lightThemeAccent = const Color(0xFFffe699);
   final Color darkThemeAccent = const Color(0xFF1d1b20);
-  @override
 
+  // Initialize LanguageController via GetX
+  final LanguageController langController = Get.put(LanguageController());
+
+  @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        scaffoldBackgroundColor: Colors.grey[100],
-        extensions: <ThemeExtension<dynamic>>[
-          CustomColors(accentColor: lightThemeAccent, darkTextColor: Colors.black),
-        ],
+    return Obx(
+      () => GetMaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        initialBinding: InitialBinding(), // ensures controllers are initialized
+        theme: ThemeData(
+          brightness: Brightness.light,
+          scaffoldBackgroundColor: Colors.grey[100],
+          extensions: <ThemeExtension<dynamic>>[
+            CustomColors(
+              accentColor: lightThemeAccent,
+              darkTextColor: Colors.black,
+            ),
+          ],
+        ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          scaffoldBackgroundColor: const Color.fromARGB(255, 39, 2, 2),
+          extensions: <ThemeExtension<dynamic>>[
+            CustomColors(
+              accentColor: const Color.fromARGB(255, 246, 244, 240),
+              darkTextColor: const Color.fromARGB(255, 10, 0, 0),
+            ),
+          ],
+        ),
+        themeMode: ThemeMode.system,
+        translations: MyTranslations(),
+        locale: langController.currentLocale.value, // reactive locale
+        fallbackLocale: const Locale('en', 'US'),
+        home: const CustomSplashScreen(),
+        // home: HomeScreen(),
       ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color.fromARGB(255, 39, 2, 2),
-        extensions: <ThemeExtension<dynamic>>[
-          CustomColors(accentColor: const Color.fromARGB(255, 246, 244, 240), darkTextColor: const Color.fromARGB(255, 10, 0, 0)),
-        ],
-      ),
-      themeMode: ThemeMode.system,
-      home: CustomSplashScreen(),
     );
   }
+}
+
+// Translations
+class MyTranslations extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys => {'en_US': enUS, 'km_KH': kmKH};
 }

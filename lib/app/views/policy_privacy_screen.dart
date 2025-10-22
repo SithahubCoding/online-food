@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-class PoliPrSCreen extends StatelessWidget{
+class PolicyPrivacyScreen extends StatelessWidget{
+  const PolicyPrivacyScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,11 +29,11 @@ class PoliPrSCreen extends StatelessWidget{
           ),
         ],
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index){
+      // body: ListView.builder(
+      //   itemBuilder: (context, index){
           
-        }
-      ),
+      //   }
+      // ),
     );
   }
 }

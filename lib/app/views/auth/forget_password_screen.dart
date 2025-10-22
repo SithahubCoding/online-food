@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import './login_screen.dart';
-// import './send_opt.dart'; // Removed as it's not used
-import './send_opt.dart'; // Assuming this is the next step
+import '../../controllers/auth_controller.dart';
+import 'login_screen.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
+  ForgetPasswordScreen({super.key});
+  final AuthController authController = Get.find<AuthController>();
+  final TextEditingController emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +26,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Enter your email to receive a verification code (OTP).', // Added descriptive text
+                  'Enter your email to receive a verification code (OTP).',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16, color: Colors.grey[700]),
                 ),
@@ -31,6 +34,7 @@ class ForgetPasswordScreen extends StatelessWidget {
 
                 // Email Input
                 TextField(
+                  controller: emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: 'Email',
@@ -44,13 +48,11 @@ class ForgetPasswordScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 30),
 
-                // Send OTP Button (Text updated for clarity in the OTP flow)
+                // Send OTP Button
+                // ចុច Send Reset Link
                 InkWell(
                   onTap: () {
-                    // 1. TODO: Implement API call to request OTP.
-                    
-                    // 2. Navigate to the OTP verification screen.
-                    Get.to(() => VerifyOtpScreen());
+                    authController.resetPassword(emailController.text.trim());
                   },
                   child: Container(
                     width: double.infinity,
@@ -63,8 +65,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        // Changed text to better reflect the action and flow
-                        'Send OTP', 
+                        'Send Reset Link',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -84,7 +85,6 @@ class ForgetPasswordScreen extends StatelessWidget {
                     Text("Remember your password?"),
                     TextButton(
                       onPressed: () {
-                        // Use Get.off() or Get.offAll() if this is the start of a flow
                         Get.off(() => LoginScreen());
                       },
                       child: Text(
