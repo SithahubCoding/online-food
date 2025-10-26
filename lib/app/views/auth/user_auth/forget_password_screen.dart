@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import './login_screen.dart';
+import '../../../controllers/user_auth_controller.dart';
+import 'login_screen.dart';
 
-class ResetPasswordScreen extends StatelessWidget {
-  const ResetPasswordScreen({super.key});
+class ForgetPasswordScreen extends StatelessWidget {
+  ForgetPasswordScreen({super.key});
+  final AuthController authController = Get.find<AuthController>();
+  final TextEditingController emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,41 +18,27 @@ class ResetPasswordScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Icon(Icons.lock_reset, size: 100, color: Colors.blueAccent),
+                Icon(Icons.lock_outline, size: 100, color: Colors.blueAccent),
                 SizedBox(height: 20),
                 Text(
-                  'Reset Password',
+                  'Forgot Password',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 10),
                 Text(
-                  'Enter your new password below to reset your account password.',
+                  'Enter your email to receive a verification code (OTP).',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16, color: Colors.grey[700]),
                 ),
                 SizedBox(height: 30),
 
-                // New Password
+                // Email Input
                 TextField(
-                  obscureText: true,
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    labelText: 'New Password',
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 20),
-
-                // Confirm Password
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Confirm Password',
-                    prefixIcon: Icon(Icons.lock),
+                    labelText: 'Email',
+                    prefixIcon: Icon(Icons.email),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -58,24 +48,11 @@ class ResetPasswordScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 30),
 
-                // Reset Password Button: UPDATED NAVIGATION
+                // Send OTP Button
+                // ចុច Send Reset Link
                 InkWell(
                   onTap: () {
-                    // 1. TODO: Implement actual password reset API logic here.
-
-                    // 2. On successful reset, navigate to the LoginScreen.
-                    // Using Get.offAll() clears the previous screens (SendOTP, VerifyOTP, ResetPassword)
-                    // from the navigation stack, preventing the user from going back to them.
-                    Get.offAll(() => LoginScreen());
-
-                    // Optional: Show a success message (a Snackbar or Dialog)
-                    Get.snackbar(
-                      "Success", 
-                      "Your password has been reset successfully. Please log in with your new password.",
-                      snackPosition: SnackPosition.BOTTOM,
-                      backgroundColor: Colors.green,
-                      colorText: Colors.white,
-                    );
+                    authController.resetPassword(emailController.text.trim());
                   },
                   child: Container(
                     width: double.infinity,
@@ -88,7 +65,7 @@ class ResetPasswordScreen extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        'Reset Password',
+                        'Send Reset Link',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -101,14 +78,14 @@ class ResetPasswordScreen extends StatelessWidget {
 
                 SizedBox(height: 20),
 
-                // Back to Login (This is still useful if the user decides to cancel the reset process)
+                // Back to Login
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("Remember your password?"),
                     TextButton(
                       onPressed: () {
-                        Get.to(() => LoginScreen());
+                        Get.off(() => LoginScreen());
                       },
                       child: Text(
                         "Login",

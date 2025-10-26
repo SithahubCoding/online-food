@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../app/controllers/auth_controller.dart';
 import '../app/controllers/theme_controller.dart';
-
-// 🧭 Screens
+import '../app/controllers/user_auth_controller.dart';
+import '../app/controllers/language_controller.dart';
+import '../app/views/profile_screen.dart';
+import '../app/views/history_screen.dart';
 import '../app/views/category_screen.dart';
 import '../app/views/favorite_screen.dart';
 import '../app/views/notification_screen.dart';
 import '../app/views/policy_privacy_screen.dart';
 import '../app/views/cart_screen.dart';
-import '../app/views/auth/login_screen.dart';
-import '../app/views/profile_screen.dart';
-import '../app/views/history_screen.dart';
 import '../app/views/dashboard/dashboard_screen.dart';
-// Controller
-import '../app/controllers/language_controller.dart';
+import '../app/views/auth/user_auth/login_screen.dart';
+import '../app/models/category_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DrawerMenu extends StatelessWidget {
   final ThemeController themeController;
@@ -27,8 +26,24 @@ class DrawerMenu extends StatelessWidget {
     required this.authController,
   });
 
+  Future<String> _getUserRole() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return '';
+    final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    if (doc.exists && doc.data()!.containsKey('role')) {
+      return doc['role'] as String;
+    }
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final defaultCategory = CategoryModel(
+      id: 'default_id',
+      name: 'All Categories',
+      icon: 'assets/images/default_icon.png', 
+    );
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -38,9 +53,7 @@ class DrawerMenu extends StatelessWidget {
             child: Column(
               children: [
                 InkWell(
-                  onTap: () {
-                    Get.to(() => ProfileScreen());
-                  },
+                  onTap: () => Get.to(() => ProfileScreen()),
                   child: const CircleAvatar(
                     radius: 35,
                     backgroundImage: AssetImage('assets/images/profile.jpg'),
@@ -49,56 +62,78 @@ class DrawerMenu extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   FirebaseAuth.instance.currentUser?.displayName ?? 'John Doe',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 Text(
-                  FirebaseAuth.instance.currentUser?.email ??
-                      'john.doe@example.com',
+                  FirebaseAuth.instance.currentUser?.email ?? 'john.doe@example.com',
                   style: const TextStyle(color: Colors.white70),
                 ),
               ],
             ),
           ),
 
+          // Home
           ListTile(
             leading: const Icon(Icons.home),
             title: Text('home'.tr),
             onTap: () => Get.back(),
           ),
-          ListTile(
-            leading: const Icon(Icons.dashboard), // Icon is specified
-            title: const Text('Dashboard'),
-            onTap: () => Get.to(() => DashboardScreen()),
+
+          // Admin Dashboard
+          FutureBuilder<String>(
+            future: _getUserRole(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return const SizedBox();
+              if (snapshot.data == 'admin') {
+                return ListTile(
+                  leading: const Icon(Icons.dashboard),
+                  title: const Text('Dashboard'),
+                  onTap: () => Get.to(() => const DashboardScreen()),
+                );
+              }
+              return const SizedBox();
+            },
           ),
+
+          // Category
           ListTile(
             leading: const Icon(Icons.category),
             title: Text('category'.tr),
-            onTap: () => Get.to(() => CategoryScreen()),
+            onTap: () {
+              // Use defaultCategory to avoid recursion
+              Get.to(() => CategoryScreen(category: defaultCategory));
+            },
           ),
+
+          // Favorite
           ListTile(
             leading: const Icon(Icons.favorite),
             title: const Text("Favorite"),
             onTap: () => Get.to(() => FavoriteScreen()),
           ),
+
+          // Notification
           ListTile(
             leading: const Icon(Icons.notifications),
             title: const Text("Notification"),
             onTap: () => Get.to(() => NotificationScreen()),
           ),
+
+          // Privacy Policy
           ListTile(
             leading: const Icon(Icons.privacy_tip),
             title: const Text("Privacy Policy"),
             onTap: () => Get.to(() => PolicyPrivacyScreen()),
           ),
+
+          // Cart
           ListTile(
             leading: const Icon(Icons.shopping_cart),
             title: const Text("Cart"),
             onTap: () => Get.to(() => CartScreen()),
           ),
+
+          // History
           ListTile(
             leading: const Icon(Icons.history),
             title: const Text("History"),
@@ -107,7 +142,7 @@ class DrawerMenu extends StatelessWidget {
 
           const Divider(),
 
-          // 🌐 Language Selection
+          // Language
           ListTile(
             leading: const Icon(Icons.language),
             title: const Text("Language"),
@@ -120,10 +155,7 @@ class DrawerMenu extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ListTile(
-                        leading: const Text(
-                          "🇰🇭",
-                          style: TextStyle(fontSize: 24),
-                        ),
+                        leading: const Text("🇰🇭", style: TextStyle(fontSize: 24)),
                         title: const Text("ភាសាខ្មែរ"),
                         onTap: () {
                           Get.find<LanguageController>().changeLanguage('km');
@@ -131,10 +163,7 @@ class DrawerMenu extends StatelessWidget {
                         },
                       ),
                       ListTile(
-                        leading: const Text(
-                          "🇺🇸",
-                          style: TextStyle(fontSize: 24),
-                        ),
+                        leading: const Text("🇺🇸", style: TextStyle(fontSize: 24)),
                         title: const Text("English"),
                         onTap: () {
                           Get.find<LanguageController>().changeLanguage('en');
@@ -148,26 +177,20 @@ class DrawerMenu extends StatelessWidget {
             },
           ),
 
-          // 🌗 Dark/Light Mode Toggle
+          // Dark/Light Theme
           Obx(
             () => SwitchListTile(
-              title: Text(
-                themeController.isDarkMode.value ? 'Dark Mode' : 'Light Mode',
-              ),
+              title: Text(themeController.isDarkMode.value ? 'Dark Mode' : 'Light Mode'),
               secondary: Icon(
-                themeController.isDarkMode.value
-                    ? Icons.dark_mode
-                    : Icons.light_mode,
-                color: themeController.isDarkMode.value
-                    ? Colors.amber
-                    : Colors.blueGrey,
+                themeController.isDarkMode.value ? Icons.dark_mode : Icons.light_mode,
+                color: themeController.isDarkMode.value ? Colors.amber : Colors.blueGrey,
               ),
               value: themeController.isDarkMode.value,
               onChanged: themeController.toggleTheme,
             ),
           ),
 
-          // 🚪 Logout
+          // Logout
           ListTile(
             leading: const Icon(Icons.exit_to_app),
             title: const Text("Logout"),

@@ -7,8 +7,7 @@ import './app/bindings/initial_binding.dart';
 import 'app/controllers/language_controller.dart';
 import 'app/translations/en_US.dart';
 import 'app/translations/km_KH.dart';
-// import 'app/views/home/home_screen.dart';
-// import 'app/views/dashboard/product_list_screen.dart';
+import 'routes/app_pages.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +21,6 @@ class MyApp extends StatelessWidget {
   final Color lightThemeAccent = const Color(0xFFffe699);
   final Color darkThemeAccent = const Color(0xFF1d1b20);
 
-  // Initialize LanguageController via GetX
   final LanguageController langController = Get.put(LanguageController());
 
   @override
@@ -31,39 +29,32 @@ class MyApp extends StatelessWidget {
       () => GetMaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
-        initialBinding: InitialBinding(), // ensures controllers are initialized
+        initialBinding: InitialBinding(),
         theme: ThemeData(
           brightness: Brightness.light,
           scaffoldBackgroundColor: Colors.grey[100],
           extensions: <ThemeExtension<dynamic>>[
-            CustomColors(
-              accentColor: lightThemeAccent,
-              darkTextColor: Colors.black,
-            ),
+            CustomColors(accentColor: lightThemeAccent, darkTextColor: Colors.black),
           ],
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
           scaffoldBackgroundColor: const Color.fromARGB(255, 39, 2, 2),
           extensions: <ThemeExtension<dynamic>>[
-            CustomColors(
-              accentColor: const Color.fromARGB(255, 246, 244, 240),
-              darkTextColor: const Color.fromARGB(255, 10, 0, 0),
-            ),
+            CustomColors(accentColor: const Color.fromARGB(255, 246, 244, 240), darkTextColor: const Color.fromARGB(255, 10, 0, 0)),
           ],
         ),
         themeMode: ThemeMode.system,
         translations: MyTranslations(),
-        locale: langController.currentLocale.value, // reactive locale
+        locale: langController.currentLocale.value,
         fallbackLocale: const Locale('en', 'US'),
         home: const CustomSplashScreen(),
-        // home: HomeScreen(),
+        getPages: AppPages.pages,
       ),
     );
   }
 }
 
-// Translations
 class MyTranslations extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {'en_US': enUS, 'km_KH': kmKH};

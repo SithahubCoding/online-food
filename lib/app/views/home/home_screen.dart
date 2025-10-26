@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/theme_controller.dart';
-import '../../controllers/auth_controller.dart';
-
+import '../../controllers/user_auth_controller.dart';
+import '../../models/category_model.dart';
+import '../../models/sub_category_model.dart';
 // 🧭 Screens
 import '../category_screen.dart';
 import '../favorite_screen.dart';
@@ -28,9 +28,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    const HomeMainScreen(),
-    CategoryScreen(),
+  final CategoryModel defaultCategory = CategoryModel(
+    id: 'default_id',
+    name: 'All Categories',
+    icon: 'assets/images/default_icon.png',
+  );
+
+  late final List<Widget> _pages = [
+    HomeMainScreen(),
+    CategoryScreen(category: defaultCategory),
     CartScreen(),
     FavoriteScreen(),
     ProfileScreen(),
@@ -39,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // ✅ បង្ហាញ AppBar និង Drawer តែពេល currentIndex == 0 (Home tab)
       appBar: _currentIndex == 0 ? const CustomAppBar() : null,
       drawer: _currentIndex == 0
           ? DrawerMenu(
@@ -47,11 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
               authController: authController,
             )
           : null,
-
-      // 🧭 Body
       body: _pages[_currentIndex],
-
-      // 🧭 Bottom Navigation
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
@@ -60,10 +61,12 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: (index) => setState(() => _currentIndex = index),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard_outlined), label: 'Category'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard_outlined), label: 'Category'),
           BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Favorite'),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favorite'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline), label: 'Profile'),
         ],
       ),
     );

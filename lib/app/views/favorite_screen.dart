@@ -1,7 +1,8 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/favorite_controller.dart';
-// import '../models/product_model.dart';
 
 class FavoriteScreen extends StatelessWidget {
   const FavoriteScreen({super.key});
@@ -23,16 +24,32 @@ class FavoriteScreen extends StatelessWidget {
           itemCount: favorites.length,
           itemBuilder: (context, index) {
             final food = favorites[index];
-            return ListTile(
-              leading: Image.asset(food.image, width: 50, height: 50),
-              title: Text(food.name),
-              subtitle: Text("\$${food.price}"),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red),
-                onPressed: () async {
-                  await favoriteController.toggleFavorite(food);
-                  Get.snackbar("Removed", "${food.name} removed from favorites");
-                },
+            return Card(
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ListTile(
+                leading: food.image.startsWith('http')
+                    ? Image.network(food.image, width: 50, height: 50, fit: BoxFit.cover)
+                    : Image.asset(food.image, width: 50, height: 50, fit: BoxFit.cover),
+                title: Text(food.name),
+                subtitle: Text("\$${food.price.toStringAsFixed(2)}"),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () async {
+                    await favoriteController.toggleFavorite(food);
+                    Get.snackbar(
+                      "Removed",
+                      "${food.name} removed from favorites",
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.red.withOpacity(0.8),
+                      colorText: Colors.white,
+                      margin: const EdgeInsets.all(10),
+                      duration: const Duration(seconds: 2),
+                    );
+                  },
+                ),
               ),
             );
           },

@@ -7,6 +7,7 @@ import 'sale_info_screen.dart';
 import 'product_list_screen.dart';
 import 'notification_screen.dart';
 import '../home/home_screen.dart';
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
@@ -15,10 +16,12 @@ class DashboardScreen extends StatelessWidget {
     return FirebaseFirestore.instance.collection('sales').snapshots().map((
       snapshot,
     ) {
+      // Initialize a list for 12 months with 0.0 sales
       List<double> monthly = List.generate(12, (index) => 0.0);
       for (var doc in snapshot.docs) {
         Timestamp ts = doc['createdAt'];
-        int month = ts.toDate().month - 1;
+        // month is 1-based, array is 0-based
+        int month = ts.toDate().month - 1; 
         double amount = doc['total'].toDouble();
         monthly[month] += amount;
       }
@@ -39,6 +42,13 @@ class DashboardScreen extends StatelessWidget {
       return data;
     });
   }
+  
+  // 🔹 Constant list for all month titles
+  static const List<String> _months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +72,6 @@ class DashboardScreen extends StatelessWidget {
           ),
         ],
       ),
-
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -140,6 +149,28 @@ class DashboardScreen extends StatelessWidget {
                 );
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.back_hand), 
+              title: const Text("User View"),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => HomeScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.back_hand), 
+              title: const Text("Logout"),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => HomeScreen()),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -149,7 +180,7 @@ class DashboardScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "ស្ថិតិការលក់ និងទំនិញ",
+              "ស្ថិតិការលក់ និងទំនិញ", // Sales and Inventory Statistics
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
@@ -158,8 +189,13 @@ class DashboardScreen extends StatelessWidget {
             StreamBuilder<List<double>>(
               stream: salesPerMonth(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return const CircularProgressIndicator();
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
                 List<double> sales = snapshot.data!;
+                // Ensure sales list is exactly 12 elements for titles to align
+                if (sales.length > 12) sales = sales.sublist(0, 12);
+                
                 return Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(
@@ -172,30 +208,45 @@ class DashboardScreen extends StatelessWidget {
                       child: BarChart(
                         BarChartData(
                           alignment: BarChartAlignment.spaceAround,
+                          maxY: sales.reduce((a, b) => a > b ? a : b) * 1.1, // Dynamic MaxY
                           titlesData: FlTitlesData(
+                            show: true,
+                            topTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            rightTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
                             bottomTitles: AxisTitles(
                               sideTitles: SideTitles(
                                 showTitles: true,
+                                // Use max 6 labels if data is sparse to keep it clean
+                                interval: sales.length > 6 ? 2.0 : 1.0, 
                                 getTitlesWidget: (value, meta) {
-                                  const months = [
-                                    'Jan',
-                                    'Feb',
-                                    'Mar',
-                                    'Apr',
-                                    'May',
-                                    'Jun',
-                                  ];
-                                  return Text(
-                                    months[value.toInt() % months.length],
-                                  );
+                                  final monthIndex = value.toInt();
+                                  if (monthIndex >= 0 && monthIndex < _months.length) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text(
+                                        _months[monthIndex],
+                                        style: const TextStyle(fontSize: 10),
+                                      ),
+                                    );
+                                  }
+                                  return Container();
                                 },
                               ),
                             ),
                             leftTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: true),
+                              sideTitles: SideTitles(showTitles: true, reservedSize: 40),
                             ),
                           ),
                           borderData: FlBorderData(show: false),
+                          gridData: const FlGridData(
+                            show: true,
+                            drawVerticalLine: false,
+                            horizontalInterval: 200, // Example interval
+                          ),
                           barGroups: List.generate(
                             sales.length,
                             (i) => BarChartGroupData(
@@ -204,6 +255,8 @@ class DashboardScreen extends StatelessWidget {
                                 BarChartRodData(
                                   toY: sales[i],
                                   color: Colors.blueAccent,
+                                  width: 10,
+                                  borderRadius: BorderRadius.circular(4),
                                 ),
                               ],
                             ),
@@ -220,41 +273,101 @@ class DashboardScreen extends StatelessWidget {
 
             // 🔹 Pie Chart (Product Category)
             const Text(
-              "សមាមាត្រទំនិញតាមប្រភេទ",
+              "សមាមាត្រទំនិញតាមប្រភេទ", // Product proportion by category
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             StreamBuilder<Map<String, double>>(
               stream: productCategoryData(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return const CircularProgressIndicator();
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                   return const Center(child: CircularProgressIndicator());
+                }
                 Map<String, double> data = snapshot.data!;
                 return Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: SizedBox(
-                    height: 220,
-                    child: PieChart(
-                      PieChartData(
-                        sections: data.entries
-                            .map(
-                              (e) => PieChartSectionData(
-                                color:
-                                    Colors.primaries[data.keys.toList().indexOf(
-                                          e.key,
-                                        ) %
-                                        Colors.primaries.length],
-                                value: e.value,
-                                title: "${e.key}\n${e.value.toInt()}",
-                                radius: 60,
-                                titleStyle: const TextStyle(
-                                  color: Colors.white,
-                                ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      height: 250,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: PieChart(
+                              PieChartData(
+                                sectionsSpace: 2,
+                                centerSpaceRadius: 40,
+                                sections: data.entries
+                                  .toList()
+                                  .asMap()
+                                  .entries
+                                  .map(
+                                    (entry) {
+                                      final index = entry.key;
+                                      final e = entry.value;
+                                      final color = Colors.primaries[index % Colors.primaries.length];
+                                      
+                                      return PieChartSectionData(
+                                        color: color,
+                                        value: e.value,
+                                        title: "${e.value.toInt()}",
+                                        radius: 60,
+                                        titleStyle: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                        badgeWidget: Text(e.key.length > 8 ? '${e.key.substring(0, 7)}...' : e.key,
+                                          style: TextStyle(color: color, fontWeight: FontWeight.bold)
+                                        ),
+                                        badgePositionPercentageOffset: 1.0,
+                                      );
+                                    },
+                                  ).toList(),
                               ),
-                            )
-                            .toList(),
+                            ),
+                          ),
+                          
+                          // Legend
+                          Expanded(
+                            flex: 2,
+                            child: ListView(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              children: data.entries.toList().asMap().entries.map((entry) {
+                                final index = entry.key;
+                                final e = entry.value;
+                                final color = Colors.primaries[index % Colors.primaries.length];
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 10,
+                                        height: 10,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: color,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Flexible(
+                                        child: Text(
+                                          "${e.key} (${e.value.toInt()})",
+                                          style: const TextStyle(fontSize: 12),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -266,15 +379,19 @@ class DashboardScreen extends StatelessWidget {
 
             // 🔹 Line Chart (Payment / Sale Growth)
             const Text(
-              "ស្ថិតិការទូទាត់ និងចំណូល",
+              "ស្ថិតិការទូទាត់ និងចំណូល", // Payment and Revenue Statistics
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             StreamBuilder<List<double>>(
               stream: salesPerMonth(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return const CircularProgressIndicator();
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                   return const Center(child: CircularProgressIndicator());
+                }
                 List<double> sales = snapshot.data!;
+                if (sales.length > 12) sales = sales.sublist(0, 12);
+                
                 return Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(
@@ -286,27 +403,38 @@ class DashboardScreen extends StatelessWidget {
                       height: 200,
                       child: LineChart(
                         LineChartData(
+                          gridData: const FlGridData(show: true, drawVerticalLine: false),
+                          borderData: FlBorderData(show: false),
+                          maxY: sales.reduce((a, b) => a > b ? a : b) * 1.1,
                           titlesData: FlTitlesData(
+                            show: true,
+                            topTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            rightTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
                             bottomTitles: AxisTitles(
                               sideTitles: SideTitles(
                                 showTitles: true,
+                                interval: sales.length > 6 ? 2.0 : 1.0,
                                 getTitlesWidget: (value, meta) {
-                                  const months = [
-                                    'Jan',
-                                    'Feb',
-                                    'Mar',
-                                    'Apr',
-                                    'May',
-                                    'Jun',
-                                  ];
-                                  return Text(
-                                    months[value.toInt() % months.length],
-                                  );
+                                  final monthIndex = value.toInt();
+                                  if (monthIndex >= 0 && monthIndex < _months.length) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text(
+                                        _months[monthIndex],
+                                        style: const TextStyle(fontSize: 10),
+                                      ),
+                                    );
+                                  }
+                                  return Container();
                                 },
                               ),
                             ),
                             leftTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: true),
+                              sideTitles: SideTitles(showTitles: true, reservedSize: 40),
                             ),
                           ),
                           lineBarsData: [
@@ -319,6 +447,10 @@ class DashboardScreen extends StatelessWidget {
                                 (i) => FlSpot(i.toDouble(), sales[i]),
                               ),
                               dotData: const FlDotData(show: true),
+                              belowBarData: BarAreaData(
+                                show: true,
+                                color: Colors.green,
+                              )
                             ),
                           ],
                         ),

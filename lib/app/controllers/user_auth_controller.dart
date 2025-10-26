@@ -2,9 +2,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../views/auth/login_screen.dart';
+import '../views/auth/user_auth/login_screen.dart';
 import '../views/home/home_screen.dart';
-import '../views/auth/send_opt.dart';
+import '../views/auth/user_auth/send_opt.dart';
 class AuthController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
 

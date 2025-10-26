@@ -1,10 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import '../home/home_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'register_screen.dart';
 import 'forget_password_screen.dart';
-import '../../controllers/auth_controller.dart'; 
+import '../admin_auth/admin_login_screen.dart'; 
+import '../../../controllers/user_auth_controller.dart'; 
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -107,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xFFffe699),
+                      color: const Color(0xFF0e1726),
                       borderRadius: BorderRadius.circular(30),
                     ),
                     width: double.infinity,
@@ -118,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black),
+                            color: Colors.white),
                       ),
                     ),
                   ),
@@ -154,17 +155,39 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 20),
 
+                // ✅ Register Button
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text("Don’t have an account?"),
                     TextButton(
                       onPressed: () {
-                        Get.to(() => RegisterScreen());
+                        Get.to(() => SignUpScreen());
                       },
                       child: const Text(
                         "Register",
-                        style: TextStyle(color: Colors.amber),
+                        style: TextStyle(color: Color(0xFFee6b25),),
+                      ),
+                    ),
+                  ],
+                ),
+
+                // ✅ Added “Login as Admin” Button
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Login as "),
+                    TextButton(
+                      onPressed: () {
+                        Get.to(() => AdminLoginScreen());
+                      },
+                      child: const Text(
+                        "Admin",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../controllers/profile_controller.dart';
-import '../controllers/auth_controller.dart';
+import '../controllers/user_auth_controller.dart';
 import 'edit_profile_screen.dart';
 import 'change_password_screen.dart';
-import 'auth/login_screen.dart';
+import 'auth/user_auth/login_screen.dart';
 import 'favorite_screen.dart';
 import 'cart_screen.dart';
 

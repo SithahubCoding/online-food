@@ -1,5 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+
 
 class ProductEditScreen extends StatefulWidget {
   final String docId;
@@ -23,6 +26,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   late TextEditingController categoryController;
 
   bool isLoading = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -37,7 +41,19 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         TextEditingController(text: widget.productData['category']);
   }
 
+  @override
+  void dispose() {
+    nameController.dispose();
+    priceController.dispose();
+    descriptionController.dispose();
+    imageController.dispose();
+    categoryController.dispose();
+    super.dispose();
+  }
+
   Future<void> updateProduct() async {
+    if (!_formKey.currentState!.validate()) return;
+    
     setState(() => isLoading = true);
 
     try {
@@ -53,17 +69,24 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         'updatedAt': FieldValue.serverTimestamp(),
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('✅ Product updated successfully')),
-      );
-
-      Navigator.pop(context);
+      // Show success snackbar
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('✅ Product updated successfully')),
+        );
+        // Navigate back
+        Navigator.pop(context);
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('❌ Error updating: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('❌ Error updating: $e')),
+        );
+      }
     } finally {
-      setState(() => isLoading = false);
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
     }
   }
 
@@ -74,41 +97,52 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(labelText: "Product Name"),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: priceController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: "Price"),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: descriptionController,
-                decoration: const InputDecoration(labelText: "Description"),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: imageController,
-                decoration: const InputDecoration(labelText: "Image URL"),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: categoryController,
-                decoration: const InputDecoration(labelText: "Category"),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: isLoading ? null : updateProduct,
-                child: isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text("Update Product"),
-              ),
-            ],
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: nameController,
+                  decoration: const InputDecoration(labelText: "Product Name"),
+                  validator: (value) => value!.trim().isEmpty ? 'Enter a name' : null,
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: priceController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: "Price"),
+                  validator: (value) {
+                    if (value!.trim().isEmpty) return 'Enter a price';
+                    if (double.tryParse(value) == null) return 'Enter a valid number';
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(labelText: "Description"),
+                  maxLines: 3,
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: imageController,
+                  decoration: const InputDecoration(labelText: "Image URL"),
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: categoryController,
+                  decoration: const InputDecoration(labelText: "Category"),
+                  validator: (value) => value!.trim().isEmpty ? 'Enter a category' : null,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: isLoading ? null : updateProduct,
+                  child: isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text("Update Product"),
+                ),
+              ],
+            ),
           ),
         ),
       ),

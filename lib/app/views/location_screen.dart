@@ -51,7 +51,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
         'Location Error',
         'Unable to get your precise location. Please select one manually.',
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.orangeAccent.withOpacity(0.9),
+        backgroundColor: Colors.orangeAccent,
         colorText: Colors.white,
       );
     }
@@ -84,7 +84,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
         'Success',
         'Delivery location selected!',
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.withOpacity(0.8),
+        backgroundColor: Colors.green,
         colorText: Colors.white,
       );
     } else {
@@ -92,7 +92,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
         'Error',
         'Please select a location first!',
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent.withOpacity(0.8),
+        backgroundColor: Colors.redAccent,
         colorText: Colors.white,
       );
     }
@@ -121,7 +121,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
         'Location Updated',
         'Using your current location!',
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.withOpacity(0.8),
+        backgroundColor: Colors.green,
         colorText: Colors.white,
       );
     } else {
@@ -130,7 +130,7 @@ class _DeliveryLocationScreenState extends State<DeliveryLocationScreen> {
         'Error',
         'Unable to get your current location!',
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent.withOpacity(0.8),
+        backgroundColor: Colors.redAccent,
         colorText: Colors.white,
       );
     }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import './reset_password.dart'; 
+import 'reset_password.dart'; 
 
 class VerifyOtpScreen extends StatelessWidget {
   const VerifyOtpScreen({super.key});
