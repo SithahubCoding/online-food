@@ -1,8 +1,7 @@
 
-
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:flutter/material.dart';
-// import 'edit_product_screen.dart';
+// import 'edit_product_screen.dart'; 
 
 // class ProductScreenList extends StatefulWidget {
 //   const ProductScreenList({super.key});
@@ -25,7 +24,7 @@
 //           IconButton(
 //             icon: const Icon(Icons.add),
 //             onPressed: () {
-//               // TODO: Navigate to Add Product Screen
+              
 //             },
 //           ),
 //         ],
@@ -56,6 +55,7 @@
 //     );
 //   }
 
+//   // ⚠️ ចំណាំ៖ DropdownMenu items គួរតែទាញពី Firestore category_db
 //   Widget _buildFilterRow() {
 //     return Padding(
 //       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -67,6 +67,7 @@
 //               DropdownMenuItem(value: 'All', child: Text('All')),
 //               DropdownMenuItem(value: 'Fast Food', child: Text('Fast Food')),
 //               DropdownMenuItem(value: 'Drinks', child: Text('Drinks')),
+//               // បន្ថែម Categories ផ្សេងទៀតតាម Firestore
 //             ],
 //             onChanged: (value) {
 //               setState(() => selectedCategory = value!);
@@ -184,7 +185,8 @@
 //                               MaterialPageRoute(
 //                                 builder: (context) => ProductEditScreen(
 //                                   docId: docId,
-//                                   productData: data,
+//                                   // ✅ កែតម្រូវ: បញ្ជូន Map data ផ្ទាល់
+//                                   productData: data, 
 //                                 ),
 //                               ),
 //                             );
@@ -214,8 +216,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'edit_product_screen.dart'; // ត្រូវធានាថាឯកសារនេះមាន
-// import 'add_data_screen.dart'; // ត្រូវធានាថាឯកសារនេះមាន
+import 'edit_product_screen.dart';
+import 'package:intl/intl.dart';
 
 class ProductScreenList extends StatefulWidget {
   const ProductScreenList({super.key});
@@ -229,6 +231,8 @@ class _ProductScreenListState extends State<ProductScreenList> {
   String selectedCategory = 'All';
   String selectedPriceOrder = 'Default';
 
+  final currencyFormatter = NumberFormat.currency(locale: 'en_US', symbol: '\$');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -238,8 +242,7 @@ class _ProductScreenListState extends State<ProductScreenList> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              // TODO: Navigate to Add Product Screen
-              // ឧទាហរណ៍: Navigator.push(context, MaterialPageRoute(builder: (context) => const AddDataScreen()));
+              // TODO: Navigate to AddDataScreen
             },
           ),
         ],
@@ -270,7 +273,6 @@ class _ProductScreenListState extends State<ProductScreenList> {
     );
   }
 
-  // ⚠️ ចំណាំ៖ DropdownMenu items គួរតែទាញពី Firestore category_db
   Widget _buildFilterRow() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -282,7 +284,6 @@ class _ProductScreenListState extends State<ProductScreenList> {
               DropdownMenuItem(value: 'All', child: Text('All')),
               DropdownMenuItem(value: 'Fast Food', child: Text('Fast Food')),
               DropdownMenuItem(value: 'Drinks', child: Text('Drinks')),
-              // បន្ថែម Categories ផ្សេងទៀតតាម Firestore
             ],
             onChanged: (value) {
               setState(() => selectedCategory = value!);
@@ -319,14 +320,14 @@ class _ProductScreenListState extends State<ProductScreenList> {
 
         List<QueryDocumentSnapshot> products = snapshot.data!.docs;
 
-        // 🧩 Filter by category
+        // Filter by category
         if (selectedCategory != 'All') {
           products = products
               .where((p) => (p['category'] ?? '') == selectedCategory)
               .toList();
         }
 
-        // 🧩 Filter by search
+        // Filter by search
         if (searchQuery.isNotEmpty) {
           products = products
               .where((p) =>
@@ -334,7 +335,7 @@ class _ProductScreenListState extends State<ProductScreenList> {
               .toList();
         }
 
-        // 🧩 Sort by price
+        // Sort by price
         if (selectedPriceOrder == 'LowToHigh') {
           products.sort((a, b) =>
               (a['price'] ?? 0).compareTo(b['price'] ?? 0));
@@ -349,12 +350,19 @@ class _ProductScreenListState extends State<ProductScreenList> {
             crossAxisCount: 2,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
-            childAspectRatio: 0.75,
+            childAspectRatio: 0.68,
           ),
           itemCount: products.length,
           itemBuilder: (context, index) {
             final data = products[index].data() as Map<String, dynamic>;
             final docId = products[index].id;
+
+            final priceFormatted =
+                currencyFormatter.format(data['price'] ?? 0);
+            final description =
+                (data['description'] ?? '').toString().length > 50
+                    ? '${(data['description'] ?? '').toString().substring(0, 50)}...'
+                    : data['description'] ?? '';
 
             return Card(
               shape: RoundedRectangleBorder(
@@ -368,7 +376,8 @@ class _ProductScreenListState extends State<ProductScreenList> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(15)),
                       child: Image.network(
                         data['image'] ?? '',
                         height: 120,
@@ -379,16 +388,34 @@ class _ProductScreenListState extends State<ProductScreenList> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      data['name'] ?? 'No Name',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16),
-                      textAlign: TextAlign.center,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: Text(
+                        data['name'] ?? 'No Name',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                    Text("\$${data['price'] ?? 'N/A'}",
+                    Text(priceFormatted,
                         style:
                             const TextStyle(color: Colors.green, fontSize: 14)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: Text(
+                        description,
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                     const Spacer(),
+                    Text(
+                      '${data['category'] ?? ''} / ${data['subCategory'] ?? ''}',
+                      style:
+                          const TextStyle(fontSize: 12, color: Colors.orange),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -400,8 +427,7 @@ class _ProductScreenListState extends State<ProductScreenList> {
                               MaterialPageRoute(
                                 builder: (context) => ProductEditScreen(
                                   docId: docId,
-                                  // ✅ កែតម្រូវ: បញ្ជូន Map data ផ្ទាល់
-                                  productData: data, 
+                                  productData: data,
                                 ),
                               ),
                             );

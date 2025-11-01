@@ -1,4 +1,3 @@
-// lib/app/theme/custom_colors.dart
 
 import 'package:flutter/material.dart';
 
@@ -35,3 +34,9 @@ class CustomColors extends ThemeExtension<CustomColors> {
     return Theme.of(context).extension<CustomColors>()!;
   }
 }
+
+// *** បន្ថែមកូដ Extension នេះ ***
+extension CustomColorsExtension on BuildContext {
+  CustomColors get customColors => Theme.of(this).extension<CustomColors>()!;
+}
+

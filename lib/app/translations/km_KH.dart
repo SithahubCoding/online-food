@@ -5,5 +5,11 @@ const Map<String, String> kmKH = {
   'profile': 'ប្រវត្តិអ្នកប្រើ',
   'language': 'ភាសា',
   'logout': 'ចេញពីគណនី',
+  'notification':'ការជូនដំណឹង',
+  'dashboard':'ផ្ទាំងគ្រប់គ្រង',
+  'history':'ប្រវត្តិប្រើប្រាស់',
+  'privacy':'គោលការណ៍ភាពឯកជន',
+  'light':'ម៉ូដពន្លឺ',
+  'cart':'កន្ត្រក',
   'confirm_logout': 'តើអ្នកចង់ចេញពីគណនីមែនទេ?',
 };

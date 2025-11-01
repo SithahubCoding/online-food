@@ -99,22 +99,6 @@ class AdminAuthController extends GetxController {
       isLoading.value = false;
     }
   }
-
-  // ✅ SEND OTP (Simulated 2FA Code Generation)
-  // void sendAdminOtp(String email) {
-  //   // Generate a 6-digit random number (100000 to 999999)
-  //   final otp = (Random().nextInt(900000) + 100000).toString();
-  //   _otpCode.value = otp;
-    
-  //   // In a real application, you would send this OTP via Email Service (e.g., SendGrid/Firebase Extensions) or SMS.
-  //   // For development, we print it to the console.
-  //   print("====================================");
-  //   print("DEBUG OTP (for $email): $otp");
-  //   print("====================================");
-
-  //   Get.snackbar("OTP Sent", "Verification code sent to $email. Check your console/email.",
-  //       backgroundColor: Colors.blueGrey, colorText: Colors.white);
-  // }
   void sendAdminOtp(String email) {
   final otp = (Random().nextInt(900000) + 100000).toString();
   _otpCode.value = otp;

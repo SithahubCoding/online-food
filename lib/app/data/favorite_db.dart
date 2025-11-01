@@ -1,3 +1,142 @@
+
+// import 'package:sqflite/sqflite.dart';
+// import 'package:path/path.dart';
+// import '../models/product_model.dart';
+
+// class FavoriteDB {
+//   static Database? _db;
+
+//   static Future<Database> get database async {
+//     if (_db != null) return _db!;
+//     _db = await _initDB();
+//     return _db!;
+//   }
+
+//   static Future<Database> _initDB() async {
+//     final dbPath = await getDatabasesPath();
+//     final path = join(dbPath, 'favorite.db');
+
+//     return await openDatabase(
+//       path,
+//       version: 1,
+//       onCreate: (db, version) async {
+//         await db.execute('''
+//           CREATE TABLE favorites(
+//             id TEXT PRIMARY KEY,
+//             name TEXT,
+//             image TEXT,
+//             description TEXT,
+//             category TEXT,
+//             subCategory TEXT,
+//             price REAL,
+//             rating REAL
+//           )
+//         ''');
+//       },
+//     );
+//   }
+
+//   static Future<void> addFavorite(FoodModel food) async {
+//     final db = await database;
+//     await db.insert(
+//       'favorites',
+//       food.toMap(),
+//       conflictAlgorithm: ConflictAlgorithm.replace,
+//     );
+//   }
+
+//   static Future<void> removeFavorite(String id) async {
+//     final db = await database;
+//     await db.delete('favorites', where: 'id = ?', whereArgs: [id]);
+//   }
+
+//   static Future<List<FoodModel>> getFavorites() async {
+//     final db = await database;
+//     final List<Map<String, dynamic>> maps = await db.query('favorites');
+//     return maps.map((e) => FoodModel.fromMap(e)).toList();
+//   }
+
+//   static Future<bool> isFavorite(String id) async {
+//     final db = await database;
+//     final List<Map<String, dynamic>> maps =
+//         await db.query('favorites', where: 'id = ?', whereArgs: [id]);
+//     return maps.isNotEmpty;
+//   }
+// }
+
+// import 'dart:io';
+// import 'package:sqflite/sqflite.dart';
+// import 'package:path/path.dart';
+// import '../models/product_model.dart';
+
+// class FavoriteDB {
+//   static Database? _db;
+
+//   static Future<Database> get database async {
+//     if (_db != null) return _db!;
+//     _db = await _initDB();
+//     return _db!;
+//   }
+
+//   // ✅ កែត្រឹមត្រូវ៖ បង្កើត database path ប្រសិនបើមិនមាន
+//   static Future<Database> _initDB() async {
+//     final dbPath = await getDatabasesPath();
+//     await Directory(dbPath).create(recursive: true); // ensure folder exists
+//     final path = join(dbPath, 'favorite.db');
+
+//     return await openDatabase(
+//       path,
+//       version: 1,
+//       onCreate: (db, version) async {
+//         await db.execute('''
+//           CREATE TABLE favorites(
+//             id TEXT PRIMARY KEY,
+//             name TEXT,
+//             image TEXT,
+//             description TEXT,
+//             category TEXT,
+//             subCategory TEXT,
+//             price REAL,
+//             rating REAL
+//           )
+//         ''');
+//       },
+//     );
+//   }
+
+//   // ✅ ការបន្ថែម favorite
+//   static Future<void> addFavorite(FoodModel food) async {
+//     final db = await database;
+//     await db.insert(
+//       'favorites',
+//       food.toMap(),
+//       conflictAlgorithm: ConflictAlgorithm.replace,
+//     );
+//   }
+
+//   // ✅ ការលុប favorite ត្រឡប់ជា int (ចំនួន row)
+//   static Future<int> removeFavorite(String id) async {
+//     final db = await database;
+//     return await db.delete('favorites', where: 'id = ?', whereArgs: [id]);
+//   }
+
+//   // ✅ ការទាញយក favorites ទាំងអស់
+//   static Future<List<FoodModel>> getFavorites() async {
+//     final db = await database;
+//     final List<Map<String, dynamic>> maps = await db.query('favorites');
+//     return maps.map((e) => FoodModel.fromMap(e)).toList();
+//   }
+
+//   // ✅ ពិនិត្យថា product មានក្នុង favorite ឬអត់
+//   static Future<bool> isFavorite(String id) async {
+//     final db = await database;
+//     final List<Map<String, dynamic>> maps =
+//         await db.query('favorites', where: 'id = ?', whereArgs: [id]);
+//     return maps.isNotEmpty;
+//   }
+// }
+
+import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/product_model.dart';
@@ -5,19 +144,23 @@ import '../models/product_model.dart';
 class FavoriteDB {
   static Database? _db;
 
+  // បង្កើត database version = 2 ដើម្បី add subCategory column
+  static const int _dbVersion = 2;
+
   static Future<Database> get database async {
     if (_db != null) return _db!;
-    _db = await initDB();
+    _db = await _initDB();
     return _db!;
   }
 
-  static Future<Database> initDB() async {
+  static Future<Database> _initDB() async {
     final dbPath = await getDatabasesPath();
+    await Directory(dbPath).create(recursive: true); // ensure folder exists
     final path = join(dbPath, 'favorite.db');
 
     return await openDatabase(
       path,
-      version: 2,
+      version: _dbVersion,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE favorites(
@@ -33,40 +176,19 @@ class FavoriteDB {
         ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion == 1) {
-          await db.execute('DROP TABLE IF EXISTS favorites_old;');
-          await db.execute('ALTER TABLE favorites RENAME TO favorites_old;');
-          await db.execute('''
-            CREATE TABLE favorites(
-              id TEXT PRIMARY KEY,
-              name TEXT,
-              image TEXT,
-              description TEXT,
-              category TEXT,
-              subCategory TEXT,
-              price REAL,
-              rating REAL
-            )
-          ''');
-          final oldData = await db.query('favorites_old');
-          for (var row in oldData) {
-            await db.insert('favorites', {
-              'id': row['id'].toString(),
-              'name': row['name'],
-              'image': row['image'],
-              'description': row['description'],
-              'category': row['category'],
-              'subCategory': row['subCategory'],
-              'price': row['price'],
-              'rating': row['rating'],
-            });
+        // បើ database ចាស់ version < 2 → បន្ថែម subCategory
+        if (oldVersion < 2) {
+          try {
+            await db.execute('ALTER TABLE favorites ADD COLUMN subCategory TEXT');
+          } catch (e) {
+            print('Column subCategory មានរួចហើយ: $e');
           }
-          await db.execute('DROP TABLE favorites_old;');
         }
       },
     );
   }
 
+  // ------------------------- CRUD -------------------------
   static Future<void> addFavorite(FoodModel food) async {
     final db = await database;
     await db.insert(
@@ -76,28 +198,21 @@ class FavoriteDB {
     );
   }
 
-  static Future<void> removeFavorite(String id) async {
+  static Future<int> removeFavorite(String id) async {
     final db = await database;
-    await db.delete(
-      'favorites',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('favorites', where: 'id = ?', whereArgs: [id]);
   }
 
   static Future<List<FoodModel>> getFavorites() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('favorites');
-    return List.generate(maps.length, (i) => FoodModel.fromMap(maps[i]));
+    return maps.map((e) => FoodModel.fromMap(e)).toList();
   }
 
   static Future<bool> isFavorite(String id) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'favorites',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    final List<Map<String, dynamic>> maps =
+        await db.query('favorites', where: 'id = ?', whereArgs: [id]);
     return maps.isNotEmpty;
   }
 }
